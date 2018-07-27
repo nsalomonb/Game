@@ -328,8 +328,14 @@ public class Panel extends JPanel implements ActionListener {
                 if(player.getMaxX() > powerup.getX() && player.getMaxY() > powerup.getY() && player.getY() < powerup.getMaxY()){
                     powerup.setVisible(false);
                     playerAmmo += 5;
+                    playerHealth += 25;
 
+                    player.setHealth(playerHealth);
                     player.setAmmo(playerAmmo);
+
+                    if(player.getHealth() > 100){
+                        player.setHealth(100);
+                    }
                 }
             } else {
                 powerups.remove(i);
