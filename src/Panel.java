@@ -26,9 +26,20 @@ public class Panel extends JPanel implements ActionListener {
     private Background background;
 
     private int policeSpawnValue = 200;
+    private int policeLower = 100;
+    private int policeHigher = 400;
+
     private int fastPoliceSpawnValue = 650;
+    private int fastPoliceLower = 300;
+    private int fastPoliceHigher = 800;
+
     private int flyingPoliceSpawnValue = 800;
+    private int flyingPoliceLower = 500;
+    private int flyingPoliceHigher = 1000;
+
     private int powerupSpawnValue = 100;
+    private int powerupLower = 1500;
+    private int powerupHigher = 2000;
 
     private int playerHealth;
     private int playerScore;
@@ -142,10 +153,14 @@ public class Panel extends JPanel implements ActionListener {
             g.setColor(Color.RED);
             g.drawString("Background 1: " + background.getBackground1(), 850, 20);
             g.drawString("Background 2: " + background.getBackground2(), 850, 40);
-            g.drawString("Police Visible: " + polices.size(), 850, 60);
+            g.drawString("Police Visible: " + polices.size() + " " + fastPolices.size() + " " + flyingPolices.size() , 850, 60);
             g.drawString("PowerUp Visible: " + powerups.size(), 850, 80);
             g.drawString("Shots: " + player.getShots(), 850, 100);
             g.drawString("Health: " + player.getHealth(), 850, 120);
+            g.drawString("Slow Police SV: " + policeSpawnValue, 850, 140);
+            g.drawString("Fast Police SV: " + fastPoliceSpawnValue, 850, 160);
+            g.drawString("Flying Police SV: " + flyingPoliceSpawnValue, 850, 180);
+            g.drawString("PowerUp SV: " + powerupSpawnValue, 850, 200);
 
             g.drawString("X: " + (background.getX() * -1) + " | Y: "+ player.getY(), player.getX(), (player.getY() - 10));
             g.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
@@ -223,11 +238,12 @@ public class Panel extends JPanel implements ActionListener {
     }
 
     private void updateSlowPolice() {
+        Random rand = new Random();
         List<Police> polices = police.getPolices();
 
         if((background.getX() * -1) == policeSpawnValue){
             police.newPolice();
-            policeSpawnValue += 200;
+            policeSpawnValue += rand.nextInt(policeHigher) + policeLower;
         }
 
         for (int i = 0; i < polices.size(); i++) {
@@ -246,11 +262,12 @@ public class Panel extends JPanel implements ActionListener {
     }
 
     private void updateFastPolice() {
+        Random rand = new Random();
         List<FastPolice> fastPolices = fastPolice.getFastPolices();
 
         if((background.getX() * -1) == fastPoliceSpawnValue){
             fastPolice.newFastPolice();
-            fastPoliceSpawnValue += 500;
+            fastPoliceSpawnValue += rand.nextInt(fastPoliceHigher) + fastPoliceLower;
         }
 
         for (int i = 0; i < fastPolices.size(); i++) {
@@ -269,11 +286,12 @@ public class Panel extends JPanel implements ActionListener {
     }
 
     private void updateFlyingPolice() {
+        Random rand = new Random();
         List<FlyingPolice> flyingPolices = flyingPolice.getFlyingPolices();
 
         if((background.getX() * -1) == flyingPoliceSpawnValue){
             flyingPolice.newFlyingPolice();
-            flyingPoliceSpawnValue += 800;
+            flyingPoliceSpawnValue += rand.nextInt(flyingPoliceHigher) + flyingPoliceLower;
         }
 
         for (int i = 0; i < flyingPolices.size(); i++) {
@@ -294,14 +312,11 @@ public class Panel extends JPanel implements ActionListener {
 
     private void updatePowerups() {
         Random rand = new Random();
-
         List<Powerup> powerups = powerup.getPowerups();
-
-        //powerupSpawnValue = rand.nextInt(500);
 
         if((background.getX() * -1) == powerupSpawnValue){
             powerup.newPowerup();
-            powerupSpawnValue += 1500;
+            powerupSpawnValue += rand.nextInt(powerupHigher) + powerupLower;
         }
 
         for (int i = 0; i < powerups.size(); i++) {
@@ -376,7 +391,7 @@ public class Panel extends JPanel implements ActionListener {
                 FlyingPolice flyingPolice = flyingPolices.get(j);
 
                 if(projectile.isVisible()) {
-                    if (projectile.getX() > flyingPolice.getX() && projectile.getY() > flyingPolice.getMaxY()
+                    if (projectile.getX() > flyingPolice.getX() && projectile.getY() < flyingPolice.getMaxY()
                             && projectile.getMaxY() > flyingPolice.getY()) {
                         projectile.setVisible(false);
                         flyingPolice.setVisible(false);
