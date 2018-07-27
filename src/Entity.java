@@ -1,5 +1,11 @@
 import java.awt.Image;
-import javax.swing.ImageIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class Entity {
 
@@ -13,6 +19,11 @@ public class Entity {
     protected boolean damageCollision;
     protected boolean itemCollision;
     protected Image image;
+    protected BufferedImage img;
+    protected Timer timer;
+    protected int counter = 0;
+    protected int delay;
+    protected int i = counter;
 
     public Entity(int x, int y) {
 
@@ -20,12 +31,19 @@ public class Entity {
         this.y = y;
         visible = true;
         paused = false;
+
+        timer = new Timer(delay, action);
+        timer.setInitialDelay(0);
+        timer.start();
+
     }
 
     protected void loadImage(String imageName) {
-
-        ImageIcon ii = new ImageIcon(imageName);
-        image = ii.getImage();
+        try {
+            img = ImageIO.read(new File(imageName));
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 
     protected void getImageDimensions() {
@@ -76,4 +94,23 @@ public class Entity {
     public void setDamageCollision(Boolean damageCollision) { this.damageCollision = damageCollision; }
 
     public void setItemCollision(Boolean itemCollision) { this.itemCollision = itemCollision; }
+
+    ActionListener action = new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent event)
+        {
+            if(i == 3)
+            {
+                timer.stop();
+                i = counter;
+                timer = new Timer(delay, action);
+                timer.setInitialDelay(0);
+                timer.start();
+            }
+            else
+            {
+                i++;
+            }
+        }
+    };
 }

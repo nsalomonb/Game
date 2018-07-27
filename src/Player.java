@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +24,10 @@ public class Player extends Entity {
 
     private boolean debug;
 
-    private Police police;
-    private Powerup powerup;
+    private int[][] spriteSheetCoords = {{0,0,32,64},
+                                        {32,0,32,64},
+                                        {64,0,32,64},
+                                        {96,0,32,64}};
 
     public Player(int x, int y) {
         super(x, y);
@@ -34,10 +39,8 @@ public class Player extends Entity {
 
         projectile = new ArrayList<>();
 
-        police = new Police(1005, 450);
-        powerup = new Powerup(1005, 400);
-
-        loadImage("src/resources/1.png");
+        loadImage("src/resources/player.png");
+        image = img.getSubimage(spriteSheetCoords[0][0], spriteSheetCoords[0][1], spriteSheetCoords[0][2], spriteSheetCoords[0][3]);
         getImageDimensions();
 
         score = 0;
@@ -48,11 +51,12 @@ public class Player extends Entity {
         vDelta = 0;
         rbDegDelta = 8f;
         gDelta = 0.25f;
+
+        delay = 200;
     }
 
     public void move() {
-
-        movingSprites();
+        image = img.getSubimage(spriteSheetCoords[i][0], spriteSheetCoords[i][1], spriteSheetCoords[i][2], spriteSheetCoords[i][3]);
 
         if (x < 10) {
             x += 1;
@@ -73,8 +77,6 @@ public class Player extends Entity {
             }
         }
     }
-
-    public void movingSprites(){}
 
     public List<Projectile> getProjectiles() {
         return projectile;

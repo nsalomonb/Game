@@ -1,21 +1,33 @@
-public class Background extends Entity {
+import javax.swing.*;
+import java.awt.*;
+
+public class Background{
 
     private int bg1;
     private int bg2;
+    private int x;
+    private int width;
+    private int height;
     private int minX;
+    private Image image;
 
     public Background(int x, int y) {
-        super(x, y);
         initBackground();
     }
 
     private void initBackground() {
 
-        loadImage("src/resources/Background.png");
+        ImageIcon ii = new ImageIcon("src/resources/Background.png");
+        image = ii.getImage();
         getImageDimensions();
         minX = width - (width *2);
         bg1 = 0;
         bg2 = width;
+    }
+
+    protected void getImageDimensions() {
+        width = image.getWidth(null);
+        height = image.getHeight(null);
     }
 
     public void move() {
@@ -36,4 +48,7 @@ public class Background extends Entity {
     public int getBackground2(){
         return bg2;
     }
+    public int getX() { return x; }
+    public Image getImage() { return image; }
+
 }
