@@ -17,7 +17,9 @@ public class Panel extends JPanel implements ActionListener {
     private final int BACKGROUND_X = 0;
     private final int BACKGROUND_START = 0;
     private final int DELAY = 10;
+
     private Timer timer;
+
     private Player player;
     private Police police;
     private FastPolice fastPolice;
@@ -219,6 +221,7 @@ public class Panel extends JPanel implements ActionListener {
             updatePlayer();
             updateBackground();
             updateCollision();
+            updateSpawnRate();
         }
         repaint();
     }
@@ -328,14 +331,13 @@ public class Panel extends JPanel implements ActionListener {
                 if(player.getMaxX() > powerup.getX() && player.getMaxY() > powerup.getY() && player.getY() < powerup.getMaxY()){
                     powerup.setVisible(false);
                     playerAmmo += 5;
-                    playerHealth += 25;
+
+                    if(player.getHealth() < 100){
+                        playerHealth += 25;
+                    }
 
                     player.setHealth(playerHealth);
                     player.setAmmo(playerAmmo);
-
-                    if(player.getHealth() > 100){
-                        player.setHealth(100);
-                    }
                 }
             } else {
                 powerups.remove(i);
@@ -356,11 +358,11 @@ public class Panel extends JPanel implements ActionListener {
         List<FlyingPolice> flyingPolices = flyingPolice.getFlyingPolices();
 
         for (int i = 0; i < projectiles.size(); i++) {
-            for (int j = 0; j < polices.size(); j++){
+            for (int j = 0; j < polices.size(); j++) {
                 Projectile projectile = projectiles.get(i);
                 Police police = polices.get(j);
 
-                if(projectile.isVisible()) {
+                if (projectile.isVisible()) {
                     if (projectile.getX() > police.getX() && projectile.getMaxY() > police.getY()) {
                         projectile.setVisible(false);
                         police.setVisible(false);
@@ -379,7 +381,8 @@ public class Panel extends JPanel implements ActionListener {
                 FastPolice fastPolice = fastPolices.get(j);
 
                 if(projectile.isVisible()) {
-                    if (projectile.getX() > fastPolice.getX() && projectile.getMaxY() > fastPolice.getY()) {
+                    if (projectile.getX() > fastPolice.getX() && projectile.getMaxY() > fastPolice.getY()
+                            && projectile.getMaxY() > fastPolice.getY() ) {
                         projectile.setVisible(false);
                         fastPolice.setVisible(false);
 
@@ -418,6 +421,47 @@ public class Panel extends JPanel implements ActionListener {
 
         if(player.getHealth() == 0){
             player.setDead(true);
+        }
+    }
+
+    private void updateSpawnRate(){
+        if(background.getX() == 3000){
+            policeLower = 40;
+            policeHigher = 340;
+            fastPoliceLower = 250;
+            fastPoliceHigher = 600;
+            flyingPoliceLower = 430;
+            flyingPoliceHigher = 800;
+        }
+        if(background.getX() == 6000){
+            policeLower = 30;
+            policeHigher = 280;
+            fastPoliceLower = 250;
+            fastPoliceHigher = 500;
+            flyingPoliceLower = 300;
+            flyingPoliceHigher = 740;
+            powerupLower = 1460;
+            powerupHigher = 1960;
+        }
+        if(background.getX() == 9000){
+            policeLower = 20;
+            policeHigher = 250;
+            fastPoliceLower = 230;
+            fastPoliceHigher = 450;
+            flyingPoliceLower = 300;
+            flyingPoliceHigher = 700;
+            powerupLower = 1400;
+            powerupHigher = 1900;
+        }
+        if(background.getX() == 12000){
+            policeLower = 10;
+            policeHigher = 200;
+            fastPoliceLower = 200;
+            fastPoliceHigher = 400;
+            flyingPoliceLower = 250;
+            flyingPoliceHigher = 600;
+            powerupLower = 1200;
+            powerupHigher = 1200;
         }
     }
 
